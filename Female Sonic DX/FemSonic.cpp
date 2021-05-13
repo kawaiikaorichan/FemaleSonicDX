@@ -9,9 +9,61 @@
 #define ReplacePVM(a, b) helperFunctions.ReplaceFile("system\\" a ".PVM", "system\\" b ".PVM");
 NJS_MATERIAL* TemporaryMaterialArray[] = { nullptr };
 
+//Light Dash Aura for DX, colors in Alpha, Red, Green, Blue
 void __cdecl SetLSDColor()
 {
-	SetMaterialAndSpriteColor_Float(0.8f, 0.8f, 0.f, 0.7f);
+	SetMaterialAndSpriteColor_Float(0.8f, 0.7f, 0.1f, 0.65f);
+}
+
+//Light Dash Aura for DC conversion
+void __cdecl Sonic_DisplayLightDashModel_mod(EntityData1* data1, EntityData2* data2_pp, CharObj2* data2)
+{
+	int v3; // eax
+	__int16 v4; // t1
+	double v5; // st7
+	float v6; // ST28_4
+	double v7; // st7
+	NJS_ACTION v8; // [esp+4h] [ebp-18h]
+	NJS_ARGB a1; // [esp+Ch] [ebp-10h]
+
+	if (!MissedFrames)
+	{
+		v3 = (unsigned __int16)data2->AnimationThing.Index;
+		v8.object = SONIC_OBJECTS[54];
+		if (data2->AnimationThing.State == 2)
+		{
+			v4 = data2->AnimationThing.LastIndex;
+			v8.motion = data2->AnimationThing.action->motion;
+		}
+		else
+		{
+			v8.motion = data2->AnimationThing.AnimData[v3].Animation->motion;
+		}
+		v5 = (double)(LevelFrameCount & 0x7F);
+		if (v5 >= 64.0)
+		{
+			v5 = 128.0 - v5;
+		}
+		v6 = v5 * 0.015625;
+		njPushMatrixEx();
+		njControl3D(NJD_CONTROL_3D_CONSTANT_MATERIAL | NJD_CONTROL_3D_ENABLE_ALPHA | NJD_CONTROL_3D_CONSTANT_ATTR);
+		njColorBlendingMode(0, NJD_COLOR_BLENDING_SRCALPHA);
+		njColorBlendingMode(NJD_DESTINATION_COLOR, NJD_COLOR_BLENDING_ONE);
+		v7 = v6 * 0.1;
+		a1.r = 0.7;
+		a1.a = 0.8;
+		a1.g = 0.1 - v7;
+		a1.b = 0.65 - v7;
+		SetMaterialAndSpriteColor(&a1);
+		njAction_Queue_407FC0(&v8, data2->AnimationThing.Frame, 0);
+		njScale(0, 1.05, 1.05, 1.05);
+		njAction_Queue_407FC0(&v8, data2->AnimationThing.Frame, 0);
+		njScale(0, 1.05, 1.05, 1.05);
+		njAction_Queue_407FC0(&v8, data2->AnimationThing.Frame, 0);
+		njColorBlendingMode(0, NJD_COLOR_BLENDING_SRCALPHA);
+		njColorBlendingMode(NJD_DESTINATION_COLOR, NJD_COLOR_BLENDING_INVSRCALPHA);
+		njPopMatrixEx();
+	}
 }
 
 extern "C"
@@ -526,12 +578,13 @@ void Init_Sonic()
 	HMODULE hm = GetModuleHandle(L"CHRMODELS_orig");
 	NJS_OBJECT** SONIC_OBJECTS = (NJS_OBJECT**)GetProcAddress(hm, "___SONIC_OBJECTS");
 	WriteJump((void*)0x007D0B50, InitSonicWeldInfo_mod);
-	WriteJump((void*)0x007D14D0, InitSonicWeldInfo_mod);
+	WriteJump((void*)0x007D14D0, InitNPCSonicWeldInfo_mod);
 }
 
 __declspec(dllexport) void __cdecl Init(const char* path, const HelperFunctions& helperFunctions)
 {
 	HMODULE Hyper = GetModuleHandle(L"sadx-hyper-sonic");
+	WriteJump((void*)0x4A1630, Sonic_DisplayLightDashModel_mod);
 	WriteCall((void*)0x4A1705, SetLSDColor);
 	//Welding
 	Init_Sonic();
@@ -549,7 +602,7 @@ __declspec(dllexport) void __cdecl Init(const char* path, const HelperFunctions&
 	SUPERSONIC_TEXLIST = SS_PVM;
 	ReplacePVM("sonic", "GirlSonic");
 	ReplacePVM("supersonic", "GirlSS");
-	ReplacePVM("hypersonic", "GirlHS")
+	ReplacePVM("hypersonic", "GirlHS");
 }
 __declspec(dllexport) ModInfo SADXModInfo = { ModLoaderVer };
 }

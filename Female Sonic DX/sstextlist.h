@@ -13,11 +13,11 @@ DataArray(NJS_TEXLIST, SSHoming, 0x01422228, 40); //0x24C
 NJS_TEXNAME SUPERSONIC_DCTexName[] = {
 	{ (void*)"s_anakage1" },
 	{ (void*)"s_hando2" },
+	{ (void*)"s_hando3" },
 	{ (void*)"s_testhand" },
-	{ (void*)"alltx_dwhite" },
-	{ (void*)"stx_eye00" },
-	{ (void*)"stx_hanasaki" },
-	{ (void*)"stx_hoho" },
+	{ (void*)"sstx_body" },
+	{ (void*)"sstx_body2" },
+	{ (void*)"sstx_redeye" },
 	{ (void*)"stx_itemshoos0" },
 	{ (void*)"stx_itemshoos1" },
 	{ (void*)"stx_shoose16" },
@@ -84,14 +84,7 @@ NJS_TEXNAME SUPERSONIC_DCTexName[] = {
 	{ (void*)"ss_dash21" }, //70 0x348
 	{ (void*)"ss_dash22" }, //71 0x354
 	{ (void*)"ss_dash23" }, //72 0x360
-	{ (void*)"stx_ha" },
-	{ (void*)"stx_hara" },
-	{ (void*)"stx_head" },
-	{ (void*)"stx_itemring" },
-	{ (void*)"stx_kutusoko0" },
-	{ (void*)"stx_kutusoko1" },
-	{ (void*)"stx_shoose4" },
-	{ (void*)"stx_shoose6" }
+	{ (void*)"stx_itemring" }
 };
 
 NJS_TEXLIST SS_PVM = { arrayptrandlength(SUPERSONIC_DCTexName) };
